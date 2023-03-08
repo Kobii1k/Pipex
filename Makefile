@@ -11,10 +11,10 @@ CFLAGS 			= -Wall -Werror -Wextra
 BIGLIBFT		= ./big_Libft/
 
 %.o:			%.c Makefile push_swap.h
-				${CC} ${CFLAGS} -fsanitize=address -c $< -o ${<:.c=.o}
+				${CC} ${CFLAGS} -fsanitize=address -g -c $< -o ${<:.c=.o}
 
 ${NAME}:		${OBJS} biglibft
-				${CC} ${OBJS} -fsanitize=address big_Libft/libft.a big_Libft/libftprintf.a -o ${NAME}
+				${CC} ${OBJS} -fsanitize=address big_Libft/libft.a big_Libft/printfd.a big_Libft/printf.a -o ${NAME}
 
 all:			${NAME}
 
