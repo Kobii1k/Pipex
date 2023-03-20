@@ -1,20 +1,20 @@
 NAME			= pipex
 
-SRCS			= pipex.c errors.c
+SRCS			= pipex.c errors.c ft_free.c pipex_utils.c
 
 OBJS			= ${SRCS:.c=.o}
 
 CC				= cc
 
-CFLAGS 			= -Wall -Werror -Wextra
+CFLAGS 			= -Wall -Werror -Wextra -g3 -fsanitize=address
 
 BIGLIBFT		= ./big_Libft/
 
 %.o:			%.c Makefile push_swap.h
-				${CC} ${CFLAGS} -fsanitize=address -g -c $< -o ${<:.c=.o}
+				${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
 ${NAME}:		${OBJS} biglibft
-				${CC} ${OBJS} -fsanitize=address -g big_Libft/libft.a big_Libft/printfd.a big_Libft/printf.a -o ${NAME}
+				${CC} ${CFLAGS} ${OBJS} big_Libft/libft.a big_Libft/printfd.a big_Libft/printf.a -o ${NAME}
 
 all:			${NAME}
 
