@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 16:34:34 by mgagne            #+#    #+#             */
-/*   Updated: 2023/03/20 18:50:12 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/03/22 12:22:02 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,15 @@
 
 typedef struct s_args
 {
+	int		size;
 	char	**path;
 	char	**envp;
-
 	int		fd;
-
 	int		in_fd;
 	int		out_fd;
-
 	char	***commands;
+	pid_t	*pid_tab;
+	int		*fd_tab;
 }				t_args;
 
 //errors.c
@@ -45,4 +45,6 @@ char	***init_commands(int argc, char **argv);
 
 //ft_free.c
 void	free_tab(char **str);
+void	free_all(t_args *args);
+
 #endif
