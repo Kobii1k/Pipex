@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 16:34:34 by mgagne            #+#    #+#             */
-/*   Updated: 2023/03/29 15:34:18 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/03/29 16:04:46 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,10 @@ typedef struct s_args
 
 //errors.c
 void	ft_print_error(char *str);
+
+//pipex_init
+void	init_fill_tabs(t_args *arg);
+t_args	*init_arg(int argc, char **argv, char **envp);
 
 //pipex_exec.c
 void	exec_command(t_args *arg, int fd[2], char **command, int end);
