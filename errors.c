@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 10:11:28 by mgagne            #+#    #+#             */
-/*   Updated: 2023/03/08 10:15:39 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/03/29 15:52:19 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,6 @@
 
 void	ft_print_error(char *str)
 {
-	ft_printf("%s\n", str);
+	ft_printfd(STDERR_FILENO, "%s\n", str);
 	exit(1);
 }

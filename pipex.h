@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 16:34:34 by mgagne            #+#    #+#             */
-/*   Updated: 2023/03/22 12:22:02 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/03/29 15:34:18 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,23 @@ typedef struct s_args
 //errors.c
 void	ft_print_error(char *str);
 
-//pipex.c
+//pipex_exec.c
+void	exec_command(t_args *arg, int fd[2], char **command, int end);
+void	handle_command(t_args *arg, char **command, int end);
+void	handle_pipe(t_args *arg);
 
 //pipex_utils.c
-char	**get_big_path(char **envp);
+char	**get_big_path(t_args *arg, char **envp);
 char	*get_path(char **path, char **command);
-char	***init_commands(int argc, char **argv);
+char	***init_commands(t_args *arg, int argc, char **argv);
+void	wait_close(t_args *arg);
+void	add_pid(t_args *arg, pid_t pid);
 
 //ft_free.c
 void	free_tab(char **str);
-void	free_all(t_args *args);
+void	free_all(t_args *args, char *str);
+void	free_arg_print(t_args *arg, char *str);
+void	free_commands(char ***commands);
+void	free_path_arg(t_args *arg, char *str);
 
 #endif
