@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 17:29:52 by mgagne            #+#    #+#             */
-/*   Updated: 2023/03/29 15:36:40 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/02 17:30:20 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ char	***init_commands(t_args *arg, int argc, char **argv)
 		if (!commands[i - 2])
 		{
 			arg->commands = commands;
-			free_all(arg, "failed to split commands : malloc error");
+			free_almost_all(arg, "failed to split commands : malloc error");
 		}
 		i++;
 	}

@@ -6,11 +6,20 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 16:03:45 by mgagne            #+#    #+#             */
-/*   Updated: 2023/03/29 16:04:04 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/02 17:33:09 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	free_almost_all(t_args *arg, char *str)
+{
+	free_commands(arg->commands);
+	free_tab(arg->path);
+	free(arg);
+	if (str)
+		ft_print_error(str);
+}
 
 void	init_fill_tabs(t_args *arg)
 {
@@ -19,11 +28,14 @@ void	init_fill_tabs(t_args *arg)
 	i = 0;
 	arg->pid_tab = malloc(sizeof(pid_t) * arg->size);
 	if (!arg->pid_tab)
-		ft_print_error("pid_tab failed to malloc");
+		free_almost_all(arg, "pid_tab failed to malloc");
 	arg->fd_tab = malloc(sizeof(int) * arg->size);
 	if (!arg->fd_tab)
-		ft_print_error("pid_tab failed to malloc");
-	while (i < arg->size)
+	{
+		free(arg->pid_tab);
+		free_almost_all(arg, "pid_tab failed to malloc");
+	}
+	while (i < arg->size - 1)
 	{
 		arg->pid_tab[i] = -1;
 		i++;
