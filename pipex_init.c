@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 16:03:45 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/02 17:33:09 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/03 13:19:12 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	init_fill_tabs(t_args *arg)
 	if (!arg->fd_tab)
 	{
 		free(arg->pid_tab);
-		free_almost_all(arg, "pid_tab failed to malloc");
+		free_almost_all(arg, "fd_tab failed to malloc");
 	}
 	while (i < arg->size - 1)
 	{
