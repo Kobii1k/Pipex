@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:05:59 by mgagne            #+#    #+#             */
-/*   Updated: 2023/03/29 15:54:33 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/25 16:49:07 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	handle_pipe(t_args *arg)
 {
 	int	i;
 
-	if (dup2(arg->in_fd, STDIN_FILENO) == -1)
+	if (arg->in_fd != -1  && dup2(arg->in_fd, STDIN_FILENO) == -1)
 		free_all(arg, "dup2 error");
 	if (dup2(arg->out_fd, STDOUT_FILENO) == -1)
 		free_all(arg, "dup2 error");
@@ -64,7 +64,13 @@ void	handle_pipe(t_args *arg)
 	i = 0;
 	while (arg->commands[i + 1])
 	{
-		handle_command(arg, arg->commands[i], 0);
+		if (i == 0)
+		{
+			if (arg->in_fd != -1)
+				handle_command(arg, arg->commands[i], 0);
+		}
+		else
+			handle_command(arg, arg->commands[i], 0);
 		i++;
 	}
 	handle_command(arg, arg->commands[i], 1);

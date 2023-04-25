@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 16:03:45 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/03 13:19:12 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/24 14:12:23 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,10 @@ t_args	*init_arg(int argc, char **argv, char **envp)
 	arg->size = argc - 3;
 	arg->in_fd = open(argv[1], O_RDONLY);
 	if (arg->in_fd == -1)
-		free_arg_print(arg, "file 1 can't be opened");
+		ft_printfd(STDERR_FILENO, "%s\n", "file 1 can't be opened");
 	arg->out_fd = open(argv[argc - 1], O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (arg->out_fd == -1)
-		free_arg_print(arg, "file 2 can't be opened");
+		ft_printfd(STDERR_FILENO, "%s\n", "file 2 can't be opened");
 	arg->envp = envp;
 	arg->path = get_big_path(arg, envp);
 	arg->commands = init_commands(arg, argc, argv);
