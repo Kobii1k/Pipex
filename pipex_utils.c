@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 17:29:52 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/02 17:30:20 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/28 15:22:23 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ char	**get_big_path(t_args *arg, char **envp)
 		i++;
 	}
 	if (!envp[i])
-		free_arg_print(arg, "couldnt find path");
+		free_arg_print(arg, "couldnt find path\n");
 	splitted = ft_split((envp[i] + 5), ':');
 	if (!splitted)
-		free_arg_print(arg, "malloc error");
+		free_arg_print(arg, "malloc error\n");
 	return (splitted);
 }
 
@@ -47,8 +47,6 @@ char	*get_path(char **path, char **command)
 		i++;
 		free(str);
 	}
-	if (!str)
-		ft_print_error("no path exists where this command is executable");
 	return (str);
 }
 
@@ -59,7 +57,7 @@ char	***init_commands(t_args *arg, int argc, char **argv)
 
 	commands = malloc(sizeof(char **) * (argc - 2));
 	if (!commands)
-		free_path_arg(arg, "malloc error");
+		free_path_arg(arg, "malloc error\n");
 	i = 2;
 	while (i < (argc - 1))
 	{
@@ -67,7 +65,7 @@ char	***init_commands(t_args *arg, int argc, char **argv)
 		if (!commands[i - 2])
 		{
 			arg->commands = commands;
-			free_almost_all(arg, "failed to split commands : malloc error");
+			free_almost_all(arg, "malloc error\n");
 		}
 		i++;
 	}
@@ -79,12 +77,15 @@ void	wait_close(t_args *arg)
 {
 	int	i;
 
-	i = 0;
-	while (i < arg->size)
+	i = arg->size - 1;
+	while (i > 0)
 	{
-		waitpid(arg->pid_tab[i], NULL, 0);
-		close(arg->fd_tab[i]);
-		i++;
+		if (arg->pid_tab[i] != -1)
+		{
+			waitpid(arg->pid_tab[i], NULL, 0);
+			close(arg->fd_tab[i]);
+		}
+		i--;
 	}
 }
 

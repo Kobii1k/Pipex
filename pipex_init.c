@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 16:03:45 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/24 14:12:23 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/28 15:21:08 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ void	init_fill_tabs(t_args *arg)
 	i = 0;
 	arg->pid_tab = malloc(sizeof(pid_t) * arg->size);
 	if (!arg->pid_tab)
-		free_almost_all(arg, "pid_tab failed to malloc");
+		free_almost_all(arg, "malloc error\n");
 	arg->fd_tab = malloc(sizeof(int) * arg->size);
 	if (!arg->fd_tab)
 	{
 		free(arg->pid_tab);
-		free_almost_all(arg, "fd_tab failed to malloc");
+		free_almost_all(arg, "malloc error\n");
 	}
 	while (i < arg->size - 1)
 	{
@@ -48,14 +48,14 @@ t_args	*init_arg(int argc, char **argv, char **envp)
 
 	arg = malloc(sizeof(t_args));
 	if (!arg)
-		ft_print_error("malloc error");
+		ft_print_error("malloc error\n");
 	arg->size = argc - 3;
 	arg->in_fd = open(argv[1], O_RDONLY);
 	if (arg->in_fd == -1)
-		ft_printfd(STDERR_FILENO, "%s\n", "file 1 can't be opened");
+		write(STDERR_FILENO, "infile can't be opened\n", 23);
 	arg->out_fd = open(argv[argc - 1], O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (arg->out_fd == -1)
-		ft_printfd(STDERR_FILENO, "%s\n", "file 2 can't be opened");
+		write(STDERR_FILENO, "outfile can't be opened\n", 24);
 	arg->envp = envp;
 	arg->path = get_big_path(arg, envp);
 	arg->commands = init_commands(arg, argc, argv);
