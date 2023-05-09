@@ -1,0 +1,3 @@
+[submodule "big_libft"]
+	path = big_libft
+	url = git@github.com:Kobii1k/big_libft.git
