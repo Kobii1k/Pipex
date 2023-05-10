@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 16:03:45 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/28 15:21:08 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/10 14:23:54 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	init_fill_tabs(t_args *arg)
 		arg->pid_tab[i] = -1;
 		i++;
 	}
+	arg->pid_tab[i] = -1;
 }
 
 t_args	*init_arg(int argc, char **argv, char **envp)

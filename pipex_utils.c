@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 17:29:52 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/28 15:22:23 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/10 17:19:07 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,23 @@ char	*get_path(char **path, char **command)
 	char	*str;
 
 	i = 0;
-	while (path[i])
+	if (path)
 	{
-		str = ft_strjoin(path[i], "/");
-		str = ft_strjoin_free(str, command[0]);
-		if (access(str, F_OK) != -1)
-			break ;
-		i++;
-		free(str);
+		while (path[i])
+		{
+			str = ft_strjoin(path[i], "/");
+			if (!str)
+				return (NULL);
+			str = ft_strjoin_free(str, command[0]);
+			if (!str)
+				return (NULL);
+			if (access(str, F_OK) != -1)
+				return (str);
+			i++;
+			free(str);
+		}
 	}
-	return (str);
+	return (NULL);
 }
 
 char	***init_commands(t_args *arg, int argc, char **argv)
