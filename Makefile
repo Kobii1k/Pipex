@@ -4,7 +4,7 @@ NAME_BONUS		= pipex_bonus
 
 SRCS			= pipex.c errors.c ft_free.c pipex_utils.c pipex_exec.c pipex_init.c
 
-SRCS_BONUS		= ./bonus/pipex.c errors.c ft_free.c pipex_utils.c pipex_exec.c pipex_init.c
+SRCS_BONUS		= bonus/pipex_bonus.c errors.c ft_free.c pipex_utils.c pipex_exec.c pipex_init.c
 
 OBJS			= ${SRCS:.c=.o}
 
@@ -12,33 +12,37 @@ OBJS_BONUS		= ${SRCS_BONUS:.c=.o}
 
 CC				= cc
 
-CFLAGS 			= -Wall -Werror -Wextra -g3 -fsanitize=address
+CFLAGS 			= -Wall -Werror -Wextra
 
-BIGLIBFT		= ./big_Libft/
+LIBFT			= ./big_libft/libft.a
+
+LIBFTDIR		= ./big_libft
+
+all:			lib ${NAME}
+
+bonus:			lib ${NAME_BONUS}
 
 %.o:			%.c Makefile pipex.h
 				${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
-${NAME}:		${OBJS}
-				${MAKE} all -C ${BIGLIBFT}
-				${CC} ${CFLAGS} ${OBJS} big_Libft/libft.a big_Libft/printfd.a big_Libft/printf.a -o ${NAME}
+${NAME}:		${OBJS} ${LIBFT}
+				${CC} ${CFLAGS} ${OBJS} ${LIBFT} -o ${NAME}
 
-${NAME_BONUS}:	${OBJS_BONUS}
-				${MAKE} all -C ${BIGLIBFT}
-				${CC} ${CFLAGS} ${OBJS_BONUS} big_Libft/libft.a big_Libft/printfd.a big_Libft/printf.a -o ${NAME_BONUS}
-
-all:			${NAME}
-
-bonus:			${NAME_BONUS}
+${NAME_BONUS}:	${OBJS_BONUS} ${LIBFT}
+				${CC} ${CFLAGS} ${OBJS_BONUS} ${LIBFT} -o ${NAME}
 
 clean:
-				rm -f ./bonus/pipex.o ${OBJS}
-				${MAKE} clean -C ${BIGLIBFT}
+				rm -f ${OBJS}
+				rm -f bonus/pipex_bonus.o
+				${MAKE} clean -C ${LIBFTDIR}
 
 fclean:			clean
-				rm -f ${NAME} ${NAME}_bonus
-				${MAKE} fclean -C ${BIGLIBFT}
+				rm -f ${NAME}
+				${MAKE} fclean -C ${LIBFTDIR}
 
 re:				fclean all
 
-.PHONY:			all clean fclean re bonus
+lib:
+				${MAKE} -C ${LIBFTDIR}
+
+.PHONY:			all bonus clean fclean re lib
