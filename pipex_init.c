@@ -6,11 +6,12 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 16:03:45 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/10 14:23:54 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/11 17:13:44 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+#include <stdio.h>
 
 void	free_almost_all(t_args *arg, char *str)
 {
@@ -53,10 +54,10 @@ t_args	*init_arg(int argc, char **argv, char **envp)
 	arg->size = argc - 3;
 	arg->in_fd = open(argv[1], O_RDONLY);
 	if (arg->in_fd == -1)
-		write(STDERR_FILENO, "infile can't be opened\n", 23);
+		perror(argv[1]);
 	arg->out_fd = open(argv[argc - 1], O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (arg->out_fd == -1)
-		write(STDERR_FILENO, "outfile can't be opened\n", 24);
+		perror(argv[argc - 1]);
 	arg->envp = envp;
 	arg->path = get_big_path(arg, envp);
 	arg->commands = init_commands(arg, argc, argv);

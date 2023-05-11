@@ -6,11 +6,12 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:05:59 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/10 17:18:45 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/11 16:59:24 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+#include <stdio.h>
 
 void	exec_command(t_args *arg, int fd[2], char **command, int end)
 {
@@ -18,25 +19,25 @@ void	exec_command(t_args *arg, int fd[2], char **command, int end)
 
 	close(fd[0]);
 	if (dup2(arg->fd, STDIN_FILENO) == -1)
-		free_all(arg, "dup2 failed\n");
+		free_all(arg, "Failed to duplicate fd (dup2 error)\n");
 	if (end == 0 && dup2(fd[1], STDOUT_FILENO) == -1)
-		free_all(arg, "dup2 failed\n");
+		free_all(arg, "Failed to duplicate fd (dup2 error)\n");
 	if (!command[0])
-		free_all(arg, "Command not found\n");
+		free_all(arg, "command not found (parse error)\n");
 	else
 	{
 		if (access(command[0], F_OK) == -1)
 		{
 			if (command[0][0] == '.')
-				free_all(arg, "Command not found\n");
+				return (perror(command[0]), free_all(arg, ""));
 			path = get_path(arg->path, command);
 			if (!path || execve(path, command, arg->envp) == -1)
-				return (free_all(arg, "Command not found\n"));
+				return (ft_no_command(command[0]), free_all(arg, ""));
 			if (path)
 				free(path);
 		}
 		else if (execve(command[0], command, arg->envp) == -1)
-			free_all(arg, "Command not found\n");
+			free_all(arg, "command not found\n");
 	}
 	return (free_all(arg, NULL), exit(0));
 }

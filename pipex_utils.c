@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 17:29:52 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/10 17:19:07 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/11 17:17:39 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ char	**get_big_path(t_args *arg, char **envp)
 		i++;
 	}
 	if (!envp[i])
-		free_arg_print(arg, "couldnt find path\n");
+		free_arg_print(arg, "$PATH variable does not exist\n");
 	splitted = ft_split((envp[i] + 5), ':');
 	if (!splitted)
-		free_arg_print(arg, "malloc error\n");
+		free_arg_print(arg, "Malloc cannot be created\n");
 	return (splitted);
 }
 
