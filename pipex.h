@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 16:34:34 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/11 15:53:56 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/12 19:36:04 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,15 @@
 # include <fcntl.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+
+# define ERROR2 "Failed to duplicate fd (dup2 error)\n"
+# define ERROR3 "(empty command)"
+# define ERROR4 "Failed to pipe fd\n"
+# define ERROR5 "Failed to create fork\n"
+# define ERROR6 ": command not found\n"
+# define ERROR7 "Malloc cannot be created\n"
+
+
 
 typedef struct s_args
 {
@@ -35,7 +44,7 @@ typedef struct s_args
 
 //errors.c
 void	ft_print_error(char *str);
-void	ft_no_command(char *str);
+void	ft_no_cmd(char *str);
 
 //pipex_init
 void	init_fill_tabs(t_args *arg);
@@ -51,8 +60,9 @@ void	handle_pipe(t_args *arg);
 char	**get_big_path(t_args *arg, char **envp);
 char	*get_path(char **path, char **command);
 char	***init_commands(t_args *arg, int argc, char **argv);
-void	wait_close(t_args *arg);
+void	wait_close(t_args *arg, int fd);
 void	add_pid(t_args *arg, pid_t pid);
+void	close_fd(t_args *arg);
 
 //ft_free.c
 void	free_tab(char **str);

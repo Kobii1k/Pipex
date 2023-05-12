@@ -6,31 +6,11 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 17:29:52 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/12 16:02:34 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/12 19:45:37 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-char	**get_big_path(t_args *arg, char **envp)
-{
-	char	**splitted;
-	int		i;
-
-	i = 0;
-	while (envp[i])
-	{
-		if (!ft_strncmp(envp[i], "PATH=", 5))
-			break ;
-		i++;
-	}
-	if (!envp[i])
-		free_arg_print(arg, "$PATH variable parse error\n");
-	splitted = ft_split((envp[i] + 5), ':');
-	if (!splitted)
-		free_arg_print(arg, "Malloc cannot be created\n");
-	return (splitted);
-}
 
 char	*get_path(char **path, char **command)
 {
@@ -57,33 +37,20 @@ char	*get_path(char **path, char **command)
 	return (NULL);
 }
 
-char	***init_commands(t_args *arg, int argc, char **argv)
+void	close_fd(t_args *arg)
 {
-	char	***commands;
-	int		i;
-
-	commands = malloc(sizeof(char **) * (argc - 2));
-	if (!commands)
-		free_path_arg(arg, "Malloc cannot be created\n");
-	i = 2;
-	while (i < (argc - 1))
-	{
-		commands[i - 2] = ft_split(argv[i], ' ');
-		if (!commands[i - 2])
-		{
-			arg->commands = commands;
-			free_almost_all(arg, "Malloc cannot be created\n");
-		}
-		i++;
-	}
-	commands[i - 2] = NULL;
-	return (commands);
+	if (arg->in_fd != -1)
+		close(arg->in_fd);
+	if (arg->out_fd != -1)
+		close(arg->out_fd);
 }
 
-void	wait_close(t_args *arg)
+void	wait_close(t_args *arg, int fd)
 {
 	int	i;
 
+	if (fd != -1)
+		close(fd);
 	i = arg->size - 1;
 	while (i > 0)
 	{
@@ -109,4 +76,14 @@ void	add_pid(t_args *arg, pid_t pid)
 	}
 	arg->pid_tab[i] = pid;
 	arg->fd_tab[i] = arg->fd;
+}
+
+void	free_tab(char **str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		free(str[i++]);
+	free(str);
 }
