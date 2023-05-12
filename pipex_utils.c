@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 17:29:52 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/11 17:17:39 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/12 16:02:34 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	**get_big_path(t_args *arg, char **envp)
 		i++;
 	}
 	if (!envp[i])
-		free_arg_print(arg, "$PATH variable does not exist\n");
+		free_arg_print(arg, "$PATH variable parse error\n");
 	splitted = ft_split((envp[i] + 5), ':');
 	if (!splitted)
 		free_arg_print(arg, "Malloc cannot be created\n");
@@ -64,7 +64,7 @@ char	***init_commands(t_args *arg, int argc, char **argv)
 
 	commands = malloc(sizeof(char **) * (argc - 2));
 	if (!commands)
-		free_path_arg(arg, "malloc error\n");
+		free_path_arg(arg, "Malloc cannot be created\n");
 	i = 2;
 	while (i < (argc - 1))
 	{
@@ -72,7 +72,7 @@ char	***init_commands(t_args *arg, int argc, char **argv)
 		if (!commands[i - 2])
 		{
 			arg->commands = commands;
-			free_almost_all(arg, "malloc error\n");
+			free_almost_all(arg, "Malloc cannot be created\n");
 		}
 		i++;
 	}

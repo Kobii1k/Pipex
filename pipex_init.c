@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 16:03:45 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/11 17:13:44 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/12 16:02:51 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ void	init_fill_tabs(t_args *arg)
 	i = 0;
 	arg->pid_tab = malloc(sizeof(pid_t) * arg->size);
 	if (!arg->pid_tab)
-		free_almost_all(arg, "malloc error\n");
+		free_almost_all(arg, "Malloc cannot be created\n");
 	arg->fd_tab = malloc(sizeof(int) * arg->size);
 	if (!arg->fd_tab)
 	{
 		free(arg->pid_tab);
-		free_almost_all(arg, "malloc error\n");
+		free_almost_all(arg, "Malloc cannot be created\n");
 	}
 	while (i < arg->size - 1)
 	{
@@ -50,7 +50,7 @@ t_args	*init_arg(int argc, char **argv, char **envp)
 
 	arg = malloc(sizeof(t_args));
 	if (!arg)
-		ft_print_error("malloc error\n");
+		ft_print_error("Malloc cannot be created\n");
 	arg->size = argc - 3;
 	arg->in_fd = open(argv[1], O_RDONLY);
 	if (arg->in_fd == -1)

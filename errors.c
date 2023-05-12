@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 10:11:28 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/11 17:11:08 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/12 17:01:56 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,10 @@ void	ft_no_command(char *str)
 
 void	ft_print_error(char *str)
 {
-	write(STDERR_FILENO, str, ft_strlen(str));
+	int	i;
+
+	i = ft_strlen(str);
+	if (i != 0)
+		write(STDERR_FILENO, str, i);
 	exit(1);
 }
