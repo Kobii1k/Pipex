@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:05:59 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/12 19:56:26 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/12 20:31:18 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,13 @@ void	handle_pipe(t_args *arg)
 {
 	int	i;
 
-	if (arg->in_fd != -1 && dup2(arg->in_fd, STDIN_FILENO) == -1)
-		free_all(arg, ERROR2);
-	if (arg->out_fd != -1 && dup2(arg->out_fd, STDOUT_FILENO) == -1)
-		free_all(arg, ERROR2);
+	if (arg->in_fd != -1)
+		if (dup2(arg->in_fd, STDIN_FILENO) == -1)
+			free_all(arg, ERROR2);
+	if (arg->out_fd != -1)
+		if (dup2(arg->out_fd, STDOUT_FILENO) == -1)
+			free_all(arg, "ERROR2");
+	ft_printf("bonjour\n");
 	arg->fd = STDIN_FILENO;
 	i = 0;
 	while (arg->commands[i + 1])
