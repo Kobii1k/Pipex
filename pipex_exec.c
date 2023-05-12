@@ -6,17 +6,36 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:05:59 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/12 19:39:17 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/12 19:56:26 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-#include <stdio.h>
 
-void	exec_command(t_args *arg, int fd[2], char **command, int end)
+void	execute(t_args *arg, int fd[2], char **command)
 {
 	char	*path;
 
+	if (access(command[0], F_OK) == -1)
+	{
+		if (command[0][0] == '.')
+			return (wait_close(arg, fd[1]),
+				perror(command[0]),
+				free_all(arg, ""));
+		path = get_path(arg->path, command);
+		if (!path || execve(path, command, arg->envp) == -1)
+			return (wait_close(arg, fd[1]),
+				ft_no_cmd(command[0]),
+				free_all(arg, ""));
+		if (path)
+			free(path);
+	}
+	else if (execve(command[0], command, arg->envp) == -1)
+		return (wait_close(arg, fd[1]), free_all(arg, ""));
+}
+
+void	exec_command(t_args *arg, int fd[2], char **command, int end)
+{
 	close(fd[0]);
 	if (dup2(arg->fd, STDIN_FILENO) == -1)
 		return (wait_close(arg, fd[1]), free_all(arg, ERROR2));
@@ -25,20 +44,7 @@ void	exec_command(t_args *arg, int fd[2], char **command, int end)
 	if (!command[0])
 		return (wait_close(arg, fd[1]), ft_no_cmd(ERROR3), free_all(arg, ""));
 	else
-	{
-		if (access(command[0], F_OK) == -1)
-		{
-			if (command[0][0] == '.')
-				return (wait_close(arg, fd[1]), perror(command[0]), free_all(arg, ""));
-			path = get_path(arg->path, command);
-			if (!path || execve(path, command, arg->envp) == -1)
-				return (wait_close(arg, fd[1]), ft_no_cmd(command[0]), free_all(arg, ""));
-			if (path)
-				free(path);
-		}
-		else if (execve(command[0], command, arg->envp) == -1)
-			return (wait_close(arg, fd[1]), free_all(arg, ""));
-	}
+		execute(arg, fd, command);
 	return (wait_close(arg, fd[1]), free_all(arg, NULL), exit(0));
 }
 

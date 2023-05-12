@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 16:34:34 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/12 19:36:04 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/12 19:52:09 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <fcntl.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <stdio.h>
 
 # define ERROR2 "Failed to duplicate fd (dup2 error)\n"
 # define ERROR3 "(empty command)"
@@ -26,8 +27,6 @@
 # define ERROR5 "Failed to create fork\n"
 # define ERROR6 ": command not found\n"
 # define ERROR7 "Malloc cannot be created\n"
-
-
 
 typedef struct s_args
 {
@@ -48,8 +47,9 @@ void	ft_no_cmd(char *str);
 
 //pipex_init
 void	init_fill_tabs(t_args *arg);
+char	***init_commands(t_args *arg, int argc, char **argv);
 t_args	*init_arg(int argc, char **argv, char **envp);
-void	free_almost_all(t_args *arg, char *str);
+char	**get_big_path(t_args *arg, char **envp);
 
 //pipex_exec.c
 void	exec_command(t_args *arg, int fd[2], char **command, int end);
@@ -57,15 +57,14 @@ void	handle_command(t_args *arg, char **command, int end);
 void	handle_pipe(t_args *arg);
 
 //pipex_utils.c
-char	**get_big_path(t_args *arg, char **envp);
 char	*get_path(char **path, char **command);
-char	***init_commands(t_args *arg, int argc, char **argv);
 void	wait_close(t_args *arg, int fd);
 void	add_pid(t_args *arg, pid_t pid);
 void	close_fd(t_args *arg);
+void	free_tab(char **str);
 
 //ft_free.c
-void	free_tab(char **str);
+void	free_almost_all(t_args *arg, char *str);
 void	free_all(t_args *args, char *str);
 void	free_arg_print(t_args *arg, char *str);
 void	free_commands(char ***commands);
