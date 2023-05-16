@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 17:29:52 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/12 19:45:37 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/16 18:23:50 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,11 @@ char	*get_path(char **path, char **command)
 	return (NULL);
 }
 
-void	close_fd(t_args *arg)
+void	close_fd(void)
 {
-	if (arg->in_fd != -1)
-		close(arg->in_fd);
-	if (arg->out_fd != -1)
-		close(arg->out_fd);
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	close(STDERR_FILENO);
 }
 
 void	wait_close(t_args *arg, int fd)
@@ -51,15 +50,12 @@ void	wait_close(t_args *arg, int fd)
 
 	if (fd != -1)
 		close(fd);
-	i = arg->size - 1;
-	while (i > 0)
+	i = arg->size;
+	while (--i >= 0)
 	{
-		if (arg->pid_tab[i] != -1)
-		{
-			waitpid(arg->pid_tab[i], NULL, 0);
+		waitpid(arg->pid_tab[i], NULL, 0);
+		if (arg->fd_tab[i] != 1)
 			close(arg->fd_tab[i]);
-		}
-		i--;
 	}
 }
 
@@ -68,14 +64,13 @@ void	add_pid(t_args *arg, pid_t pid)
 	int	i;
 
 	i = 0;
-	while (i < arg->size)
-	{
-		if (arg->pid_tab[i] < 0)
-			break ;
+	while (arg->pid_tab[i] != -1 && i < arg->size)
 		i++;
+	if (i < arg->size)
+	{
+		arg->pid_tab[i] = pid;
+		arg->fd_tab[i] = arg->fd;
 	}
-	arg->pid_tab[i] = pid;
-	arg->fd_tab[i] = arg->fd;
 }
 
 void	free_tab(char **str)

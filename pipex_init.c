@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 16:03:45 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/12 20:20:36 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/16 16:15:24 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	init_fill_tabs(t_args *arg)
 {
 	int	i;
 
-	i = 0;
 	arg->pid_tab = malloc(sizeof(pid_t) * arg->size);
 	if (!arg->pid_tab)
 		free_almost_all(arg, ERROR7);
@@ -26,12 +25,13 @@ void	init_fill_tabs(t_args *arg)
 		free(arg->pid_tab);
 		free_almost_all(arg, ERROR7);
 	}
-	while (i < arg->size - 1)
+	i = 0;
+	while (i < arg->size)
 	{
 		arg->pid_tab[i] = -1;
+		arg->fd_tab[i] = 1;
 		i++;
 	}
-	arg->pid_tab[i] = -1;
 }
 
 char	***init_commands(t_args *arg, int argc, char **argv)

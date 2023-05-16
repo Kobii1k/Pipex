@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 16:34:34 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/12 19:52:09 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/16 18:23:46 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	handle_pipe(t_args *arg);
 char	*get_path(char **path, char **command);
 void	wait_close(t_args *arg, int fd);
 void	add_pid(t_args *arg, pid_t pid);
-void	close_fd(t_args *arg);
+void	close_fd(void);
 void	free_tab(char **str);
 
 //ft_free.c

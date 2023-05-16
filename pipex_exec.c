@@ -6,46 +6,57 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:05:59 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/12 20:31:18 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/16 18:50:25 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	execute(t_args *arg, int fd[2], char **command)
+int	execute(t_args *arg, char **command)
 {
 	char	*path;
 
 	if (access(command[0], F_OK) == -1)
 	{
 		if (command[0][0] == '.')
-			return (wait_close(arg, fd[1]),
-				perror(command[0]),
-				free_all(arg, ""));
+			return (perror(command[0]), 1);
 		path = get_path(arg->path, command);
-		if (!path || execve(path, command, arg->envp) == -1)
-			return (wait_close(arg, fd[1]),
-				ft_no_cmd(command[0]),
-				free_all(arg, ""));
+		if (path)
+			if (execve(path, command, arg->envp) == -1)
+				return (free(path), ft_no_cmd(command[0]), 1);
 		if (path)
 			free(path);
 	}
 	else if (execve(command[0], command, arg->envp) == -1)
-		return (wait_close(arg, fd[1]), free_all(arg, ""));
+		return (1);
+	return (0);
 }
 
 void	exec_command(t_args *arg, int fd[2], char **command, int end)
 {
 	close(fd[0]);
-	if (dup2(arg->fd, STDIN_FILENO) == -1)
-		return (wait_close(arg, fd[1]), free_all(arg, ERROR2));
-	if (end == 0 && dup2(fd[1], STDOUT_FILENO) == -1)
-		return (wait_close(arg, fd[1]), free_all(arg, ERROR2));
-	if (!command[0])
-		return (wait_close(arg, fd[1]), ft_no_cmd(ERROR3), free_all(arg, ""));
+	if (arg->fd != -1)
+	{
+		if (dup2(arg->fd, STDIN_FILENO) == -1)
+			return (wait_close(arg, fd[1]), free_all(arg, ERROR2));
+		else
+			close(arg->fd);
+	}
+	if (end == 0)
+	{
+		if (dup2(fd[1], STDOUT_FILENO) == -1)
+			return (wait_close(arg, fd[1]), free_all(arg, ERROR2));
+		else
+			close(fd[1]);
+	}
 	else
-		execute(arg, fd, command);
-	return (wait_close(arg, fd[1]), free_all(arg, NULL), exit(0));
+		close(fd[1]);
+	if (!command[0])
+		return (wait_close(arg, -1), ft_no_cmd(ERROR3), free_all(arg, ""));
+	else
+		if (execute(arg, command) == 1)
+			return (wait_close(arg, -1), free_all(arg, ""));
+	return (wait_close(arg, -1), free_all(arg, NULL), exit(0));
 }
 
 void	handle_command(t_args *arg, char **command, int end)
@@ -54,38 +65,58 @@ void	handle_command(t_args *arg, char **command, int end)
 	pid_t	pid;
 
 	if (pipe(fd) == -1)
-	{
-		wait_close(arg, -1);
-		free_all(arg, ERROR4);
-	}
+		return (wait_close(arg, -1), free_all(arg, ERROR4));
 	pid = fork();
 	if (pid == -1)
 	{
 		close(fd[0]);
-		wait_close(arg, fd[1]);
-		free_all(arg, ERROR5);
+		close(fd[1]);
+		return (wait_close(arg, -1), free_all(arg, ERROR5));
 	}
 	else if (pid == 0)
 		exec_command(arg, fd, command, end);
 	add_pid(arg, pid);
 	close(fd[1]);
-	if (end)
+	if (end == 1)
+	{
 		close(fd[0]);
+		close(arg->fd);
+	}
 	else
 		arg->fd = fd[0];
+}
+
+void	dup_fds(t_args *arg)
+{
+	if (arg->out_fd != -1)
+	{
+		if (dup2(arg->out_fd, STDOUT_FILENO) == -1)
+		{
+			close(arg->in_fd);
+			close(arg->out_fd);
+			free_all(arg, ERROR2);
+		}
+		else
+			close(arg->out_fd);
+	}
+	if (arg->in_fd != -1)
+	{
+		if (dup2(arg->in_fd, STDIN_FILENO) == -1)
+		{
+			close(arg->in_fd);
+			free_all(arg, ERROR2);
+		}
+		else
+			close(arg->in_fd);
+	}
 }
 
 void	handle_pipe(t_args *arg)
 {
 	int	i;
 
-	if (arg->in_fd != -1)
-		if (dup2(arg->in_fd, STDIN_FILENO) == -1)
-			free_all(arg, ERROR2);
-	if (arg->out_fd != -1)
-		if (dup2(arg->out_fd, STDOUT_FILENO) == -1)
-			free_all(arg, "ERROR2");
-	ft_printf("bonjour\n");
+	dup_fds(arg);
+	i = 2;
 	arg->fd = STDIN_FILENO;
 	i = 0;
 	while (arg->commands[i + 1])
@@ -100,7 +131,5 @@ void	handle_pipe(t_args *arg)
 		i++;
 	}
 	if (arg->out_fd != -1)
-	{
 		handle_command(arg, arg->commands[i], 1);
-	}
 }
