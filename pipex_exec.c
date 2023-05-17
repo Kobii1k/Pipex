@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:05:59 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/17 19:24:05 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/17 19:29:58 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,8 @@ int	execute(t_args *arg, char **command)
 		if (command[0][0] == '.' || command[0][0] == '/')
 			return (perror(command[0]), 1);
 		path = get_path(arg->path, command);
-		if (path)
-			if (execve(path, command, arg->envp) == -1)
-				return (free(path), ft_no_cmd(command[0]), 1);
+		if (execve(path, command, arg->envp) == -1)
+			return (free(path), ft_no_cmd(command[0]), 1);
 		if (path)
 			free(path);
 	}
