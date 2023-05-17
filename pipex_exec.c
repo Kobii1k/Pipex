@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:05:59 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/17 16:55:00 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/17 19:24:05 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,20 +35,22 @@ int	execute(t_args *arg, char **command)
 void	exec_command(t_args *arg, int fd[2], char **command, int end)
 {
 	close(fd[0]);
+	if (arg->fd != arg->in_fd)
+		close(arg->in_fd);
 	if (dup2(arg->fd, STDIN_FILENO) == -1)
 	{
 		close(arg->fd);
 		return (wait_close(arg, fd[1]), free_all(arg, ERROR2));
 	}
+	cloz(arg);
 	close(arg->fd);
-	if (end == 0 && dup2(fd[1], STDOUT_FILENO) == -1)
+	if (!end && dup2(fd[1], STDOUT_FILENO) == -1)
 		return (wait_close(arg, fd[1]), free_all(arg, ERROR2));
 	close(fd[1]);
 	if (!command[0])
 		return (ft_no_cmd(ERROR3), wait_close(arg, -1), free_all(arg, ""));
-	else
-		if (execute(arg, command) == 1)
-			return (wait_close(arg, -1), free_all(arg, ""));
+	else if (execute(arg, command))
+		return (wait_close(arg, -1), free_all(arg, ""));
 	return (wait_close(arg, -1), free_all(arg, NULL), exit(0));
 }
 
@@ -71,10 +73,11 @@ void	handle_command(t_args *arg, char **command, int end)
 		exec_command(arg, fd, command, end);
 	add_pid(arg, pid);
 	close(fd[1]);
+	arg->fd = fd[0];
+	arg->in_fd = STDIN_FILENO;
+	arg->out_fd = STDOUT_FILENO;
 	if (end == 1)
 		close(fd[0]);
-	else
-		arg->fd = fd[0];
 }
 
 void	dup_fds(t_args *arg)
@@ -96,15 +99,17 @@ void	handle_pipe(t_args *arg)
 	int	i;
 
 	dup_fds(arg);
-	i = 2;
-	arg->fd = arg->in_fd;
 	i = 0;
+	if (arg->in_fd == -1)
+		arg->fd = 0;
+	else
+		arg->fd = arg->in_fd;
 	while (arg->commands[i + 1])
 	{
 		if (i == 0)
 		{
 			if (arg->in_fd != -1)
-				handle_command(arg, arg->commands[i], -1);
+				handle_command(arg, arg->commands[i], 0);
 		}
 		else
 			handle_command(arg, arg->commands[i], 0);

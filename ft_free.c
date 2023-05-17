@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 17:28:41 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/16 18:23:34 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/17 19:21:39 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ void	free_arg_print(t_args *arg, char *str)
 {
 	close(arg->in_fd);
 	close(arg->out_fd);
-	close_fd();
 	free(arg);
 	ft_print_error(str);
 }
@@ -38,7 +37,6 @@ void	free_path_arg(t_args *arg, char *str)
 {
 	close(arg->in_fd);
 	close(arg->out_fd);
-	close_fd();
 	free_tab(arg->path);
 	free(arg);
 	ft_print_error(str);
@@ -48,7 +46,6 @@ void	free_almost_all(t_args *arg, char *str)
 {
 	close(arg->in_fd);
 	close(arg->out_fd);
-	close_fd();
 	free_commands(arg->commands);
 	free_tab(arg->path);
 	free(arg);
@@ -57,7 +54,6 @@ void	free_almost_all(t_args *arg, char *str)
 
 void	free_all(t_args *arg, char *str)
 {
-	close_fd();
 	free_commands(arg->commands);
 	free_tab(arg->path);
 	free(arg->pid_tab);

@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 17:29:52 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/17 16:08:44 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/17 19:21:43 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,16 @@ char	*get_path(char **path, char **command)
 	return (NULL);
 }
 
-void	close_fd(void)
+void	cloz(t_args *arg)
 {
-	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
-	close(STDERR_FILENO);
+	int	i;
+
+	i = arg->size;
+	while (--i >= 0)
+	{
+		if (arg->fd_tab[i] != 1)
+			close(arg->fd_tab[i]);
+	}
 }
 
 void	wait_close(t_args *arg, int fd)
