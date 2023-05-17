@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:05:59 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/16 18:50:25 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/17 14:27:54 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,20 @@ void	exec_command(t_args *arg, int fd[2], char **command, int end)
 	if (arg->fd != -1)
 	{
 		if (dup2(arg->fd, STDIN_FILENO) == -1)
-			return (wait_close(arg, fd[1]), free_all(arg, ERROR2));
-		else
+		{
 			close(arg->fd);
+			return (wait_close(arg, fd[1]), free_all(arg, ERROR2));
+		}
+		close(arg->fd);
 	}
 	if (end == 0)
 	{
 		if (dup2(fd[1], STDOUT_FILENO) == -1)
 			return (wait_close(arg, fd[1]), free_all(arg, ERROR2));
-		else
-			close(fd[1]);
 	}
-	else
-		close(fd[1]);
+	close(fd[1]);
 	if (!command[0])
-		return (wait_close(arg, -1), ft_no_cmd(ERROR3), free_all(arg, ""));
+		return (ft_no_cmd(ERROR3), wait_close(arg, -1), free_all(arg, ""));
 	else
 		if (execute(arg, command) == 1)
 			return (wait_close(arg, -1), free_all(arg, ""));
@@ -71,6 +70,7 @@ void	handle_command(t_args *arg, char **command, int end)
 	{
 		close(fd[0]);
 		close(fd[1]);
+		close(arg->in_fd);
 		return (wait_close(arg, -1), free_all(arg, ERROR5));
 	}
 	else if (pid == 0)
@@ -78,10 +78,7 @@ void	handle_command(t_args *arg, char **command, int end)
 	add_pid(arg, pid);
 	close(fd[1]);
 	if (end == 1)
-	{
 		close(fd[0]);
-		close(arg->fd);
-	}
 	else
 		arg->fd = fd[0];
 }
@@ -96,19 +93,18 @@ void	dup_fds(t_args *arg)
 			close(arg->out_fd);
 			free_all(arg, ERROR2);
 		}
-		else
 			close(arg->out_fd);
 	}
-	if (arg->in_fd != -1)
-	{
-		if (dup2(arg->in_fd, STDIN_FILENO) == -1)
-		{
-			close(arg->in_fd);
-			free_all(arg, ERROR2);
-		}
-		else
-			close(arg->in_fd);
-	}
+	// if (arg->in_fd != -1)
+	// {
+	// 	if (dup2(arg->in_fd, STDIN_FILENO) == -1)
+	// 	{
+	// 		close(arg->in_fd);
+	// 		free_all(arg, ERROR2);
+	// 	}
+	// 	else
+	// 		close(arg->in_fd);
+	// }
 }
 
 void	handle_pipe(t_args *arg)
@@ -117,7 +113,7 @@ void	handle_pipe(t_args *arg)
 
 	dup_fds(arg);
 	i = 2;
-	arg->fd = STDIN_FILENO;
+	arg->fd = arg->in_fd;
 	i = 0;
 	while (arg->commands[i + 1])
 	{
