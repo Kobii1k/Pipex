@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:05:59 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/17 19:29:58 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/17 19:50:53 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,18 @@ int	execute(t_args *arg, char **command)
 void	exec_command(t_args *arg, int fd[2], char **command, int end)
 {
 	close(fd[0]);
-	if (arg->fd != arg->in_fd)
+	if (end != -1)
 		close(arg->in_fd);
 	if (dup2(arg->fd, STDIN_FILENO) == -1)
 	{
 		close(arg->fd);
 		return (wait_close(arg, fd[1]), free_all(arg, ERROR2));
 	}
-	cloz(arg);
-	close(arg->fd);
 	if (!end && dup2(fd[1], STDOUT_FILENO) == -1)
 		return (wait_close(arg, fd[1]), free_all(arg, ERROR2));
 	close(fd[1]);
+	cloz(arg);
+	// close(arg->fd);
 	if (!command[0])
 		return (ft_no_cmd(ERROR3), wait_close(arg, -1), free_all(arg, ""));
 	else if (execute(arg, command))
@@ -72,11 +72,11 @@ void	handle_command(t_args *arg, char **command, int end)
 		exec_command(arg, fd, command, end);
 	add_pid(arg, pid);
 	close(fd[1]);
-	arg->fd = fd[0];
-	arg->in_fd = STDIN_FILENO;
-	arg->out_fd = STDOUT_FILENO;
 	if (end == 1)
 		close(fd[0]);
+	arg->fd = fd[0];
+	// arg->in_fd = STDIN_FILENO;
+	// arg->out_fd = STDOUT_FILENO;
 }
 
 void	dup_fds(t_args *arg)
@@ -100,7 +100,7 @@ void	handle_pipe(t_args *arg)
 	dup_fds(arg);
 	i = 0;
 	if (arg->in_fd == -1)
-		arg->fd = 0;
+		arg->fd = 1;
 	else
 		arg->fd = arg->in_fd;
 	while (arg->commands[i + 1])
@@ -108,7 +108,10 @@ void	handle_pipe(t_args *arg)
 		if (i == 0)
 		{
 			if (arg->in_fd != -1)
-				handle_command(arg, arg->commands[i], 0);
+			{
+				handle_command(arg, arg->commands[i], -1);
+				close(arg->in_fd);
+			}
 		}
 		else
 			handle_command(arg, arg->commands[i], 0);
