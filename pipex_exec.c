@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:05:59 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/18 14:02:49 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/18 17:18:20 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ int	execute(t_args *arg, char **command)
 		if (command[0][0] == '.' || command[0][0] == '/')
 			return (perror(command[0]), 1);
 		path = get_path(arg->path, command);
+		if (!path)
+			return (free(path), ft_no_cmd(command[0]), 1);
 		if (execve(path, command, arg->envp) == -1)
 			return (free(path), ft_no_cmd(command[0]), 1);
 		if (path)
@@ -34,17 +36,21 @@ int	execute(t_args *arg, char **command)
 void	exec_command(t_args *arg, int fd[2], char **command, int end)
 {
 	close(fd[0]);
-	if (end != -1)
-		close(arg->in_fd);
 	if (dup2(arg->fd, STDIN_FILENO) == -1)
 	{
 		close(arg->fd);
 		return (wait_close(arg, fd[1]), free_all(arg, ERROR2));
 	}
+	if (arg->fd != 1)
+	{
+		close(arg->in_fd);
+		if (end != -1)
+			close(arg->fd);
+	}
 	if (end != 1 && dup2(fd[1], STDOUT_FILENO) == -1)
 		return (wait_close(arg, fd[1]), free_all(arg, ERROR2));
 	close(fd[1]);
-	close_fd(arg);
+	// close_fd(arg);
 	// close(arg->fd);
 	if (!command[0])
 		return (ft_no_cmd(ERROR3), wait_close(arg, -1), free_all(arg, ""));
@@ -75,8 +81,6 @@ void	handle_command(t_args *arg, char **command, int end)
 	if (end == 1)
 		close(fd[0]);
 	arg->fd = fd[0];
-	// arg->in_fd = STDIN_FILENO;
-	// arg->out_fd = STDOUT_FILENO;
 }
 
 void	dup_fds(t_args *arg)
@@ -108,10 +112,7 @@ void	handle_pipe(t_args *arg)
 		if (i == 0)
 		{
 			if (arg->in_fd != -1)
-			{
 				handle_command(arg, arg->commands[i], -1);
-				close(arg->in_fd);
-			}
 		}
 		else
 			handle_command(arg, arg->commands[i], 0);
