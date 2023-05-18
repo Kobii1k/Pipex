@@ -6,13 +6,13 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 16:03:45 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/18 17:02:30 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/18 17:37:35 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	init_fill_tabs(t_args *arg)
+static void	init_fill_tabs(t_args *arg)
 {
 	int	i;
 
@@ -34,7 +34,7 @@ void	init_fill_tabs(t_args *arg)
 	}
 }
 
-char	***init_commands(t_args *arg, int argc, char **argv)
+static char	***init_commands(t_args *arg, int argc, char **argv)
 {
 	char	***commands;
 	int		i;

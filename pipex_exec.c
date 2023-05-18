@@ -6,13 +6,13 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:05:59 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/18 17:18:20 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/18 17:34:47 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	execute(t_args *arg, char **command)
+static int	execute(t_args *arg, char **command)
 {
 	char	*path;
 
@@ -33,7 +33,7 @@ int	execute(t_args *arg, char **command)
 	return (0);
 }
 
-void	exec_command(t_args *arg, int fd[2], char **command, int end)
+static void	exec_command(t_args *arg, int fd[2], char **command, int end)
 {
 	close(fd[0]);
 	if (dup2(arg->fd, STDIN_FILENO) == -1)
@@ -50,8 +50,6 @@ void	exec_command(t_args *arg, int fd[2], char **command, int end)
 	if (end != 1 && dup2(fd[1], STDOUT_FILENO) == -1)
 		return (wait_close(arg, fd[1]), free_all(arg, ERROR2));
 	close(fd[1]);
-	// close_fd(arg);
-	// close(arg->fd);
 	if (!command[0])
 		return (ft_no_cmd(ERROR3), wait_close(arg, -1), free_all(arg, ""));
 	else if (execute(arg, command))
@@ -59,7 +57,7 @@ void	exec_command(t_args *arg, int fd[2], char **command, int end)
 	return (wait_close(arg, -1), free_all(arg, NULL), exit(0));
 }
 
-void	handle_command(t_args *arg, char **command, int end)
+static void	handle_command(t_args *arg, char **command, int end)
 {
 	int		fd[2];
 	pid_t	pid;
@@ -83,7 +81,7 @@ void	handle_command(t_args *arg, char **command, int end)
 	arg->fd = fd[0];
 }
 
-void	dup_fds(t_args *arg)
+static void	dup_fds(t_args *arg)
 {
 	if (arg->out_fd != -1)
 	{

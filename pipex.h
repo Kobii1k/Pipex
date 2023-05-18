@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 16:34:34 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/18 13:46:47 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/18 17:37:55 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,14 @@ void	ft_print_error(char *str);
 void	ft_no_cmd(char *str);
 
 //pipex_init
-void	init_fill_tabs(t_args *arg);
-char	***init_commands(t_args *arg, int argc, char **argv);
-t_args	*init_arg(int argc, char **argv, char **envp);
 char	**get_big_path(t_args *arg, char **envp);
+t_args	*init_arg(int argc, char **argv, char **envp);
 
 //pipex_exec.c
-void	exec_command(t_args *arg, int fd[2], char **command, int end);
-void	handle_command(t_args *arg, char **command, int end);
 void	handle_pipe(t_args *arg);
 
 //pipex_utils.c
+void	close_fd(t_args *arg);
 char	*get_path(char **path, char **command);
 void	wait_close(t_args *arg, int fd);
 void	add_pid(t_args *arg, pid_t pid);
@@ -68,8 +65,5 @@ void	free_all(t_args *args, char *str);
 void	free_arg_print(t_args *arg, char *str);
 void	free_commands(char ***commands);
 void	free_path_arg(t_args *arg, char *str);
-
-
-void	close_fd(t_args *arg);
 
 #endif
