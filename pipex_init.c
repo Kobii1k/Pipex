@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 16:03:45 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/18 17:37:35 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/18 17:41:46 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ t_args	*init_arg(int argc, char **argv, char **envp)
 
 	arg = malloc(sizeof(t_args));
 	if (!arg)
-		ft_print_error(ERROR7);
+		ft_error_exit(ERROR7);
 	arg->size = argc - 3;
 	arg->in_fd = open(argv[1], O_RDONLY);
 	if (arg->in_fd == -1)

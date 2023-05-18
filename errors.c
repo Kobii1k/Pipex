@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 10:11:28 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/17 14:29:11 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/18 17:42:01 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ void	ft_no_cmd(char *str)
 
 	res = ft_strjoin(str, ERROR6);
 	if (!res)
-		ft_print_error("malloc error\n");
+		ft_error_exit("malloc error\n");
 	write(STDERR_FILENO, res, ft_strlen(str) + 20);
 	free(res);
 	return ;
 }
 
-void	ft_print_error(char *str)
+void	ft_error_exit(char *str)
 {
 	int	i;
 

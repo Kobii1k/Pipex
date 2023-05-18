@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 16:34:34 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/18 17:37:55 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/18 17:46:20 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ typedef struct s_args
 }				t_args;
 
 //errors.c
-void	ft_print_error(char *str);
+void	ft_error_exit(char *str);
 void	ft_no_cmd(char *str);
 
 //pipex_init
@@ -50,14 +50,14 @@ char	**get_big_path(t_args *arg, char **envp);
 t_args	*init_arg(int argc, char **argv, char **envp);
 
 //pipex_exec.c
-void	handle_pipe(t_args *arg);
+void	handle_pipes(t_args *arg);
 
 //pipex_utils.c
-void	close_fd(t_args *arg);
+void	close_fds(t_args *arg);
 char	*get_path(char **path, char **command);
 void	wait_close(t_args *arg, int fd);
 void	add_pid(t_args *arg, pid_t pid);
-void	free_tab(char **str);
+void	free_tab_str(char **str);
 
 //ft_free.c
 void	free_almost_all(t_args *arg, char *str);

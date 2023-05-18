@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:05:59 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/18 17:34:47 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/18 17:44:57 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ static void	dup_fds(t_args *arg)
 	}
 }
 
-void	handle_pipe(t_args *arg)
+void	handle_pipes(t_args *arg)
 {
 	int	i;
 

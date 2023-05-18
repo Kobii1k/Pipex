@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 17:29:52 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/18 17:37:48 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/18 17:45:50 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*get_path(char **path, char **command)
 	return (NULL);
 }
 
-void	close_fd(t_args *arg)
+void	close_fds(t_args *arg)
 {
 	if (arg->in_fd != -1)
 		close(arg->in_fd);
@@ -77,7 +77,7 @@ void	add_pid(t_args *arg, pid_t pid)
 	}
 }
 
-void	free_tab(char **str)
+void	free_tab_str(char **str)
 {
 	int	i;
 
