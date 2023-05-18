@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:05:59 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/17 19:50:53 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/18 14:02:49 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@ void	exec_command(t_args *arg, int fd[2], char **command, int end)
 		close(arg->fd);
 		return (wait_close(arg, fd[1]), free_all(arg, ERROR2));
 	}
-	if (!end && dup2(fd[1], STDOUT_FILENO) == -1)
+	if (end != 1 && dup2(fd[1], STDOUT_FILENO) == -1)
 		return (wait_close(arg, fd[1]), free_all(arg, ERROR2));
 	close(fd[1]);
-	cloz(arg);
+	close_fd(arg);
 	// close(arg->fd);
 	if (!command[0])
 		return (ft_no_cmd(ERROR3), wait_close(arg, -1), free_all(arg, ""));

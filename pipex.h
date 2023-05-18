@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 16:34:34 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/17 19:21:50 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/18 13:46:47 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,6 @@ void	free_commands(char ***commands);
 void	free_path_arg(t_args *arg, char *str);
 
 
-void	cloz(t_args *arg);
+void	close_fd(t_args *arg);
 
 #endif
