@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 16:34:34 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/18 17:46:20 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/19 14:36:16 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_args	*init_arg(int argc, char **argv, char **envp);
 void	handle_pipes(t_args *arg);
 
 //pipex_utils.c
-void	close_fds(t_args *arg);
+void	close_fds(t_args *arg, int s);
 char	*get_path(char **path, char **command);
 void	wait_close(t_args *arg, int fd);
 void	add_pid(t_args *arg, pid_t pid);

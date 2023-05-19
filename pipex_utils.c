@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 17:29:52 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/18 17:45:50 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/19 14:39:08 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,26 @@ char	*get_path(char **path, char **command)
 	return (NULL);
 }
 
-void	close_fds(t_args *arg)
+void	close_fds(t_args *arg, int s)
 {
+	int	i;
+
+	i = arg->size;
+	while (--i >= 0)
+	{
+		if (arg->fd_tab[i] != 1)
+			close(arg->fd_tab[i]);
+	}
 	if (arg->in_fd != -1)
 		close(arg->in_fd);
 	if (arg->out_fd != -1)
 		close(arg->out_fd);
-	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
-	close(STDERR_FILENO);
+	if (s)
+	{
+		close(STDIN_FILENO);
+		close(STDOUT_FILENO);
+		close(STDERR_FILENO);
+	}
 }
 
 void	wait_close(t_args *arg, int fd)
@@ -73,7 +84,8 @@ void	add_pid(t_args *arg, pid_t pid)
 	if (i < arg->size)
 	{
 		arg->pid_tab[i] = pid;
-		arg->fd_tab[i] = arg->fd;
+		if (arg->fd != -1)
+			arg->fd_tab[i] = arg->fd;
 	}
 }
 
