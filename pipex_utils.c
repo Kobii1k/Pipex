@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 17:29:52 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/19 14:39:08 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/23 14:17:10 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,22 +41,25 @@ void	close_fds(t_args *arg, int s)
 {
 	int	i;
 
-	i = arg->size;
-	while (--i >= 0)
+	if (!s)
 	{
-		if (arg->fd_tab[i] != 1)
-			close(arg->fd_tab[i]);
+		i = arg->size;
+		while (--i >= 0)
+		{
+			if (arg->fd_tab[i] != 1)
+				close(arg->fd_tab[i]);
+		}
 	}
-	if (arg->in_fd != -1)
-		close(arg->in_fd);
-	if (arg->out_fd != -1)
-		close(arg->out_fd);
-	if (s)
+	else
 	{
 		close(STDIN_FILENO);
 		close(STDOUT_FILENO);
 		close(STDERR_FILENO);
 	}
+	if (arg->in_fd != -1)
+		close(arg->in_fd);
+	if (arg->out_fd != -1)
+		close(arg->out_fd);
 }
 
 void	wait_close(t_args *arg, int fd)
