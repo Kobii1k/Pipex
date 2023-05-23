@@ -29,7 +29,7 @@ ${NAME}:		${OBJS} ${LIBFT}
 				${CC} ${CFLAGS} ${OBJS} ${LIBFT} -o ${NAME}
 
 ${NAME_BONUS}:	${OBJS_BONUS} ${LIBFT}
-				${CC} ${CFLAGS} ${OBJS_BONUS} ${LIBFT} -o ${NAME}
+				${CC} ${CFLAGS} ${OBJS_BONUS} ${LIBFT} -o ${NAME_BONUS}
 
 clean:
 				rm -f ${OBJS}
@@ -37,7 +37,7 @@ clean:
 				${MAKE} clean -C ${LIBFTDIR}
 
 fclean:			clean
-				rm -f ${NAME}
+				rm -f ${NAME} ${NAME_BONUS}
 				${MAKE} fclean -C ${LIBFTDIR}
 
 re:				fclean all
