@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 17:29:52 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/23 14:17:10 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/25 15:53:48 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void	close_fds(t_args *arg, int s)
 	{
 		close(STDIN_FILENO);
 		close(STDOUT_FILENO);
-		close(STDERR_FILENO);
 	}
 	if (arg->in_fd != -1)
 		close(arg->in_fd);

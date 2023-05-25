@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 16:03:45 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/18 17:41:46 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/25 15:55:54 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ t_args	*init_arg(int argc, char **argv, char **envp)
 		perror(argv[1]);
 	arg->out_fd = open(argv[argc - 1], O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (arg->out_fd == -1)
-		return (perror(argv[argc - 1]), free_arg_print(arg, ""), NULL);
+		perror(argv[argc - 1]);
 	arg->envp = envp;
 	arg->path = get_big_path(arg, envp);
 	arg->commands = init_commands(arg, argc, argv);
