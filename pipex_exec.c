@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:05:59 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/19 14:34:08 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/31 15:38:48 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static void	handle_command(t_args *arg, char **command, int end)
 		exec_command(arg, fd, command, end);
 	add_pid(arg, pid);
 	close(fd[1]);
-	if (end == 1)
+	if (end == 1 || arg->out_fd == -1)
 		close(fd[0]);
 	arg->fd = fd[0];
 }
