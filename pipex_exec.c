@@ -6,15 +6,38 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:05:59 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/31 15:38:48 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/06/01 11:38:29 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+int	contains_slash(char *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd[i])
+	{
+		if (cmd[i] == '/')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 static int	execute(t_args *arg, char **command)
 {
 	char	*path;
+
+	if (contains_slash(command[0]))
+	{
+		if (access(command[0], F_OK) != -1)
+		{
+			if (execve(command[0], command, arg->envp) == -1)
+				return (perror(command[0]), 1);
+		}
+	}
 
 	if (access(command[0], F_OK) == -1)
 	{
@@ -28,8 +51,16 @@ static int	execute(t_args *arg, char **command)
 		if (path)
 			free(path);
 	}
-	else if (execve(command[0], command, arg->envp) == -1)
-		return (perror(command[0]), 1);
+	else
+	{
+		if (contains_slash(command[0]))
+		{
+			if (execve(command[0], command, arg->envp) == -1)
+				return (perror(command[0]), 1);
+		}
+		else
+			return (ft_no_cmd(command[0]), 1);
+	}
 	return (0);
 }
 
