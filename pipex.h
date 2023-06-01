@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 16:34:34 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/19 14:36:16 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/06/01 12:34:55 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	ft_no_cmd(char *str);
 //pipex_init
 char	**get_big_path(t_args *arg, char **envp);
 t_args	*init_arg(int argc, char **argv, char **envp);
+int		contains_slash(char *cmd);
 
 //pipex_exec.c
 void	handle_pipes(t_args *arg);
