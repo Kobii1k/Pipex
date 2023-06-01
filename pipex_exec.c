@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:05:59 by mgagne            #+#    #+#             */
-/*   Updated: 2023/06/01 11:38:29 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/06/01 11:58:02 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,6 @@ int	contains_slash(char *cmd)
 static int	execute(t_args *arg, char **command)
 {
 	char	*path;
-
-	if (contains_slash(command[0]))
-	{
-		if (access(command[0], F_OK) != -1)
-		{
-			if (execve(command[0], command, arg->envp) == -1)
-				return (perror(command[0]), 1);
-		}
-	}
 
 	if (access(command[0], F_OK) == -1)
 	{
